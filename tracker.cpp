@@ -54,7 +54,28 @@ void loadFromFile(vector<Assignment>& assignments, const string& filename)
     {
         return;
     }
-    // Read each line and recreate assignments
+    
+    string line;
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        Assignment a;
+        string temp;
+
+        getline(ss, temp, ',');
+        a.id = stoi(temp);
+
+        getline(ss, a.title, ',');
+        getline(ss, a.courseName, ',');
+        getline(ss, a.dueDate, ',');
+        getline(ss, a.priority, ',');
+        getline(ss, a.status);
+
+        assignments.push_back(a);
+    }
+
+    file.close();
 }
 
 int getValidatedIntInput(int min, int max)
