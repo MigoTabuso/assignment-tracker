@@ -4,26 +4,47 @@
 #include <string>
 #include <vector>
 
-// Structure representing a single student assignment
 struct Assignment {
     int id;
     std::string title;
-    std::string course;
-    std::string dueDate;
-    std::string status; // e.g., "Pending" or "Completed"
+    std::string courseName;
+    std::string dueDate;   // Format: YYYY-MM-DD
+    std::string priority;  // "High", "Medium", or "Low"
+    std::string status;    // "Pending", "In Progress", or "Completed"
 };
 
-// Function prototypes for Menu, Core Logic, and File Storage/Validation
-void showMenu();
-void addAssignment(std::vector<Assignment>& assignments);
-void viewAssignments(const std::vector<Assignment>& assignments);
-void searchAssignment(const std::vector<Assignment>& assignments);
-void updateAssignment(std::vector<Assignment>& assignments);
-void deleteAssignment(std::vector<Assignment>& assignments);
+struct SummaryStats {
+    int total = 0;
+    int completed = 0;
+    int pending = 0;
+    int highPriority = 0;
+    double completionRate = 0.0;
+};
 
-// File I/O and validation prototypes (handled primarily by Member 3)
-void saveToFile(const std::vector<Assignment>& assignments, const std::string& filename);
-void loadFromFile(std::vector<Assignment>& assignments, const std::string& filename);
-int getValidatedIntInput(int min, int max);
+class AssignmentTracker {
+private:
+    std::vector<Assignment> assignments;
+    int nextId = 1;
+
+public:
+    Assignment addAssignment(const std::string& title,
+                             const std::string& courseName,
+                             const std::string& dueDate,
+                             const std::string& priority,
+                             const std::string& status = "Pending");
+
+    bool updateAssignment(int id,
+                          const std::string& newTitle,
+                          const std::string& newCourse,
+                          const std::string& newDueDate,
+                          const std::string& newPriority,
+                          const std::string& newStatus);
+
+    std::vector<Assignment> searchByCourse(const std::string& courseName) const;
+    std::vector<Assignment> searchByDueDate(const std::string& dueDate) const;
+
+    SummaryStats generateSummary() const;
+    const std::vector<Assignment>& getAllAssignments() const;
+};
 
 #endif
