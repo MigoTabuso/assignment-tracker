@@ -8,7 +8,6 @@ int main() {
     vector<Assignment> assignments;
     string filename = "assignments.txt";
 
-    // Load existing records from file upon startup
     loadFromFile(assignments, filename);
 
     int choice;
@@ -23,8 +22,7 @@ int main() {
         cout << "5. Delete Assignment\n";
         cout << "6. Save and Exit\n";
         cout << "Enter your choice (1-6): ";
-        
-        // Basic input check to prevent infinite loops on text entry
+
         if (!(cin >> choice)) {
             cout << "Invalid input type. Please enter a number between 1 and 6.\n";
             cin.clear();
