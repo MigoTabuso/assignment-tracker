@@ -1,4 +1,7 @@
 #include "tracker.h"
+#include <fstream>
+#include <sstream>
+#include <limits>
 #include <algorithm>
 #include <cctype>
 
@@ -62,6 +65,83 @@ std::vector<Assignment> AssignmentTracker::searchByDueDate(const std::string& du
     return results;
 }
 
+void saveToFile(const vector<Assignment>& assignments, const string& filename)
+{
+    ofstream file(filename);
+
+    if (!file)
+    {
+        cout << "Error opening file.\n";
+        return;
+    }
+
+    for (const auto& a : assignments)
+    {
+        file << a.id << ","
+             << a.title << ","
+             << a.courseName << ","
+             << a.dueDate << ","
+             << a.priority << ","
+             << a.status << "\n";
+    }
+}
+
+void loadFromFile(vector<Assignment>& assignments, const string& filename)
+{
+    ifstream file(filename);
+    if (!file)
+    {
+        return;
+    }
+    
+    string line;
+
+    while (getline(file, line))
+    {
+        stringstream ss(line);
+        Assignment a;
+        string temp;
+
+        getline(ss, temp, ',');
+        a.id = stoi(temp);
+
+        getline(ss, a.title, ',');
+        getline(ss, a.courseName, ',');
+        getline(ss, a.dueDate, ',');
+        getline(ss, a.priority, ',');
+        getline(ss, a.status);
+
+        assignments.push_back(a);
+    }
+
+    file.close();
+}
+
+int getValidatedIntInput(int min, int max)
+{
+    int value;
+
+    while (true)
+    {
+        if (!(cin >> value))
+        {
+            cout << "Invalid input.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+
+        if (value < min || value > max)
+        {
+            cout << "Value must be between "
+                 << min << " and "
+                 << max << ".\n";
+            continue;
+        }
+
+        return value;
+    }
+}
 SummaryStats AssignmentTracker::generateSummary() const {
     SummaryStats stats;
     stats.total = static_cast<int>(assignments.size());
