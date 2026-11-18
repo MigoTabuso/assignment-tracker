@@ -2,7 +2,8 @@
 #include <cassert>
 #include <iostream>
 
-int main() {
+int main()
+{
     AssignmentTracker tracker;
 
     // Boundary Case: Summary on an empty tracker (must not divide by zero)
